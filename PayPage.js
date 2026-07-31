@@ -36,13 +36,13 @@ window.onerror = function(message, source, line, column, error) {
 window.onunhandledrejection = function(event) {
 
     log("PROMISE REJECTION");
-
     log(String(event.reason));
 };
 
 document.addEventListener("DOMContentLoaded", function() {
 
     log("DOM LOADED");
+
 });
 
 window.initializePayment = function(session) {
@@ -82,43 +82,41 @@ window.initializePayment = function(session) {
 
             event.preventDefault();
 
-            log("PAY BUTTON CLICKED");
-            
-            log("### VERSION 2 ###");
+            log("===== PAY NOW CLICKED =====");
 
             log(
-                "components prototype: " +
-                JSON.stringify(
-                    Object.getOwnPropertyNames(
-                        Object.getPrototypeOf(components)
-                    )
-                )
+                "components keys: " +
+                JSON.stringify(Object.keys(components))
             );
 
             log(
-                "csipay prototype: " +
-                JSON.stringify(
-                    Object.getOwnPropertyNames(
-                        Object.getPrototypeOf(csipay)
-                    )
-                )
+                "csipay keys: " +
+                JSON.stringify(Object.keys(csipay))
             );
 
-            alert("BUTTON CLICKED");
+            for (const key in components) {
 
-            log(
-                "components prototype: " +
-                Object.getOwnPropertyNames(
-                    Object.getPrototypeOf(components)
-                ).join(", ")
-            );
+                log(
+                    "components." +
+                    key +
+                    " = " +
+                    typeof components[key]
+                );
 
-            log(
-                "csipay prototype: " +
-                Object.getOwnPropertyNames(
-                    Object.getPrototypeOf(csipay)
-                ).join(", ")
-            );
+            }
+
+            for (const key in csipay) {
+
+                log(
+                    "csipay." +
+                    key +
+                    " = " +
+                    typeof csipay[key]
+                );
+
+            }
+
+            log("===== END OBJECT DUMP =====");
 
         });
 
@@ -137,5 +135,7 @@ window.initializePayment = function(session) {
             log(e.stack);
 
         }
+
     }
+
 };
