@@ -82,29 +82,24 @@ window.initializePayment = function(session) {
 
             event.preventDefault();
 
-            log("SUBMIT EVENT FIRED");
+            log("PAY BUTTON CLICKED");
 
             alert("BUTTON CLICKED");
-            form.addEventListener("submit", function(event) {
 
-                event.preventDefault();
+            log(
+                "components prototype: " +
+                Object.getOwnPropertyNames(
+                    Object.getPrototypeOf(components)
+                ).join(", ")
+            );
 
-                log("PAY BUTTON CLICKED");
+            log(
+                "csipay prototype: " +
+                Object.getOwnPropertyNames(
+                    Object.getPrototypeOf(csipay)
+                ).join(", ")
+            );
 
-                log(
-                    "components prototype: " +
-                    Object.getOwnPropertyNames(
-                        Object.getPrototypeOf(components)
-                    ).join(", ")
-                );
-
-                log(
-                    "csipay prototype: " +
-                    Object.getOwnPropertyNames(
-                        Object.getPrototypeOf(csipay)
-                    ).join(", ")
-                );
-            });
         });
 
         log("Submit listener attached");
