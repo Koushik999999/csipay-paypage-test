@@ -57,6 +57,15 @@ window.initializePayment = function (session) {
         );
 
         log("Full Card component added");
+        
+        document
+            .getElementById("paymentForm")
+            .addEventListener("submit", function (event) {
+
+                event.preventDefault();
+
+                log("PAY BUTTON CLICKED");
+            });
 
     } catch (e) {
 
