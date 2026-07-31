@@ -1,11 +1,10 @@
-function log(message) {
+function send(message) {
 
-    if (window.webkit?.messageHandlers?.payPage) {
+    if (window.webkit &&
+        window.webkit.messageHandlers &&
+        window.webkit.messageHandlers.payPage) {
 
-        window.webkit.messageHandlers.payPage.postMessage({
-            type: "log",
-            message
-        });
+        window.webkit.messageHandlers.payPage.postMessage(message);
 
     } else {
 
@@ -14,39 +13,56 @@ function log(message) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function log(message) {
 
-    log("DOM Loaded");
+    send({
+        type: "log",
+        message: message
+    });
+}
 
+window.onerror = function(message, source, line, column, error) {
+
+    log("WINDOW ERROR");
+    log(String(message));
+
+    if (error) {
+
+        log(error.stack || error.toString());
+
+    }
+};
+
+window.onunhandledrejection = function(event) {
+
+    log("PROMISE REJECTION");
+
+    log(String(event.reason));
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    log("DOM LOADED");
 });
 
-window.initializePayment = function (session) {
+window.initializePayment = function(session) {
 
-    log("Initializing payment page...");
+    log("initializePayment called");
 
     window.paymentSession = session;
 
-    log("CSIPayJS type = " + typeof CSIPayJS);
-
-    if (!session) {
-
-        log("PaymentSession missing");
-        return;
-
-    }
-
     try {
 
-        log("Before constructor");
+        log("Creating CSIPay");
 
         const csipay = CSIPayJS(session.accessToken);
 
-        log("After constructor");
-
-        log("CSIPayJS initialized");
+        log("CSIPay created");
 
         const components = csipay.components({
+
             orderId: session.orderId
+
         });
 
         log("Components created");
@@ -56,20 +72,26 @@ window.initializePayment = function (session) {
             "full-card"
         );
 
-        log("Full Card component added");
-        
-        document
-            .getElementById("paymentForm")
-            .addEventListener("submit", function (event) {
+        log("Card component added");
 
-                event.preventDefault();
+        const form = document.getElementById("paymentForm");
 
-                log("PAY BUTTON CLICKED");
-            });
+        log("Form = " + (form !== null));
+
+        form.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            log("SUBMIT EVENT FIRED");
+
+            alert("BUTTON CLICKED");
+        });
+
+        log("Submit listener attached");
 
     } catch (e) {
 
-        log("Initialization failed");
+        log("EXCEPTION");
 
         log(e.name);
 
@@ -80,7 +102,5 @@ window.initializePayment = function (session) {
             log(e.stack);
 
         }
-
     }
-
 };
