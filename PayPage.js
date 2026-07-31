@@ -84,39 +84,49 @@ window.initializePayment = function(session) {
 
             log("===== PAY NOW CLICKED =====");
 
-            log(
-                "components keys: " +
-                JSON.stringify(Object.keys(components))
-            );
+            try {
 
-            log(
-                "csipay keys: " +
-                JSON.stringify(Object.keys(csipay))
-            );
+                log("Calling processOrder()...");
 
-            for (const key in components) {
+                const result = csipay.processOrder();
 
-                log(
-                    "components." +
-                    key +
-                    " = " +
-                    typeof components[key]
-                );
+                log("processOrder() returned");
+
+                if (result instanceof Promise) {
+
+                    log("Returned a Promise");
+
+                    result
+                        .then(function(value) {
+
+                            log("PROMISE RESOLVED");
+
+                            log(JSON.stringify(value));
+
+                        })
+                        .catch(function(error) {
+
+                            log("PROMISE REJECTED");
+
+                            log(error && error.stack ? error.stack : String(error));
+
+                        });
+
+                } else {
+
+                    log("Return value:");
+
+                    log(JSON.stringify(result));
+
+                }
+
+            } catch (e) {
+
+                log("processOrder threw exception");
+
+                log(e && e.stack ? e.stack : String(e));
 
             }
-
-            for (const key in csipay) {
-
-                log(
-                    "csipay." +
-                    key +
-                    " = " +
-                    typeof csipay[key]
-                );
-
-            }
-
-            log("===== END OBJECT DUMP =====");
 
         });
 
