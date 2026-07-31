@@ -82,60 +82,40 @@ window.initializePayment = function(session) {
 
             event.preventDefault();
 
-            log("===== PAY NOW CLICKED =====");
+            log("Submitting payment...");
 
-            try {
+            const events = [
+                "payment-success",
+                "payment-failed",
+                "payment-error",
+                "success",
+                "error",
+                "complete",
+                "completed",
+                "processing",
+                "attempt-payment"
+            ];
 
-                log("Calling processOrder()...");
-                
-                log("processOrder typeof = " + typeof csipay.processOrder);
-                log("on typeof = " + typeof csipay.on);
+            events.forEach(function(name) {
 
-                log("processOrder source:");
-                log(String(csipay.processOrder));
+                try {
 
-                log("on source:");
-                log(String(csipay.on));
+                    csipay.on(name, function(data) {
 
-                const result = csipay.processOrder();
+                        log("EVENT: " + name);
+                        log(JSON.stringify(data));
 
-                log("processOrder() returned");
+                    });
 
-                if (result instanceof Promise) {
+                } catch (e) {
 
-                    log("Returned a Promise");
-
-                    result
-                        .then(function(value) {
-
-                            log("PROMISE RESOLVED");
-
-                            log(JSON.stringify(value));
-
-                        })
-                        .catch(function(error) {
-
-                            log("PROMISE REJECTED");
-
-                            log(error && error.stack ? error.stack : String(error));
-
-                        });
-
-                } else {
-
-                    log("Return value:");
-
-                    log(JSON.stringify(result));
+                    log("Cannot register " + name);
 
                 }
 
-            } catch (e) {
+            });
 
-                log("processOrder threw exception");
-
-                log(e && e.stack ? e.stack : String(e));
-
-            }
+            csipay.processOrder();
 
         });
 
