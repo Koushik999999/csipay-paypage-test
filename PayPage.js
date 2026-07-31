@@ -87,6 +87,15 @@ window.initializePayment = function(session) {
             try {
 
                 log("Calling processOrder()...");
+                
+                log("processOrder typeof = " + typeof csipay.processOrder);
+                log("on typeof = " + typeof csipay.on);
+
+                log("processOrder source:");
+                log(String(csipay.processOrder));
+
+                log("on source:");
+                log(String(csipay.on));
 
                 const result = csipay.processOrder();
 
