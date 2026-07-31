@@ -83,6 +83,26 @@ window.initializePayment = function(session) {
             event.preventDefault();
 
             log("PAY BUTTON CLICKED");
+            
+            log("### VERSION 2 ###");
+
+            log(
+                "components prototype: " +
+                JSON.stringify(
+                    Object.getOwnPropertyNames(
+                        Object.getPrototypeOf(components)
+                    )
+                )
+            );
+
+            log(
+                "csipay prototype: " +
+                JSON.stringify(
+                    Object.getOwnPropertyNames(
+                        Object.getPrototypeOf(csipay)
+                    )
+                )
+            );
 
             alert("BUTTON CLICKED");
 
