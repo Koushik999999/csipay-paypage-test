@@ -45,6 +45,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
+function showToast(message, type = "success") {
+
+    const toast = document.getElementById("toast");
+
+    toast.className = "toast " + type;
+
+    toast.innerHTML = message.replace(/\n/g, "<br>");
+
+    requestAnimationFrame(() => {
+        toast.classList.add("show");
+    });
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3500);
+}
+
 window.initializePayment = function(session) {
 
     log("initializePayment called");
@@ -96,22 +115,33 @@ window.initializePayment = function(session) {
                 "attempt-payment"
             ];
 
-            events.forEach(function(name) {
+            csipay.on("payment-success", function(data) {
 
-                try {
+                log("EVENT: payment-success");
+                log(JSON.stringify(data));
 
-                    csipay.on(name, function(data) {
+                showToast(
+                    "✅ Payment Successful!",
+                    "success"
+                );
 
-                        log("EVENT: " + name);
-                        log(JSON.stringify(data));
+            });
 
-                    });
+            csipay.on("payment-failed", function(data) {
 
-                } catch (e) {
+                log("EVENT: payment-failed");
+                log(JSON.stringify(data));
 
-                    log("Cannot register " + name);
+                let message = "Payment Failed";
 
+                if (data && data.messages && data.messages.length > 0) {
+                    message += "\n\n" + data.messages.join("\n");
                 }
+
+                showToast(
+                    "❌ " + message,
+                    "error"
+                );
 
             });
 
