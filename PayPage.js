@@ -135,19 +135,28 @@ window.initializePayment = function(session) {
 
         log("Registering payment-success listener");
 
-        csipay.on("payment-success", function(data) {
+       log("Registering payment-complete listener");
 
-            log("================================");
-            log("EVENT: payment-success");
-            log("Payload: " + safeStringify(data));
-            log("================================");
+csipay.on("payment-complete", function(data) {
 
-            showToast(
-                "✅ Payment Successful!",
-                "success"
-            );
+    log("================================");
+    log("EVENT: payment-complete");
+    log("Payload: " + safeStringify(data));
+    log("================================");
 
-        });
+    showToast(
+        "✅ Payment Successful!",
+        "success"
+    );
+
+    const payButton = document.getElementById("payButton");
+
+    if (payButton) {
+        payButton.disabled = false;
+        payButton.textContent = "Pay Now";
+    }
+
+});
 
         log("Registering payment-failed listener");
 
