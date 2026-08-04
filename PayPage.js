@@ -151,31 +151,40 @@ window.initializePayment = function(session) {
 
         log("Registering payment-failed listener");
 
-        csipay.on("payment-failed", function(data) {
+csipay.on("payment-failed", function(data) {
 
-            log("================================");
-            log("EVENT: payment-failed");
-            log("Payload: " + safeStringify(data));
-            log("================================");
+    log("================================");
+    log("EVENT: payment-failed");
+    log("Payload: " + safeStringify(data));
+    log("================================");
 
-            let message = "Payment Failed";
+    let message = "Payment Failed";
 
-            if (
-                data &&
-                data.messages &&
-                data.messages.length > 0
-            ) {
+    if (
+        data &&
+        data.messages &&
+        data.messages.length > 0
+    ) {
 
-                message += "\n\n" + data.messages.join("\n");
+        message += "\n\n" + data.messages.join("\n");
 
-            }
+    }
 
-            showToast(
-                "❌ " + message,
-                "error"
-            );
+    showToast(
+        "❌ " + message,
+        "error"
+    );
 
-        });
+    const payButton = document.getElementById("payButton");
+
+    if (payButton) {
+
+        payButton.disabled = false;
+        payButton.textContent = "Pay Now";
+
+    }
+
+});
 
         /*
          * Additional diagnostic events.
