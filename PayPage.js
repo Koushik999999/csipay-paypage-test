@@ -1,8 +1,10 @@
 function send(message) {
 
-    if (window.webkit &&
+    if (
+        window.webkit &&
         window.webkit.messageHandlers &&
-        window.webkit.messageHandlers.payPage) {
+        window.webkit.messageHandlers.payPage
+    ) {
 
         window.webkit.messageHandlers.payPage.postMessage(message);
 
@@ -17,26 +19,45 @@ function log(message) {
 
     send({
         type: "log",
-        message: message
+        message: String(message)
     });
+}
+
+function safeStringify(value) {
+
+    try {
+
+        return JSON.stringify(value);
+
+    } catch (e) {
+
+        return String(value);
+
+    }
 }
 
 window.onerror = function(message, source, line, column, error) {
 
-    log("WINDOW ERROR");
-    log(String(message));
+    log("===== WINDOW ERROR =====");
+    log("Message: " + message);
+    log("Source: " + source);
+    log("Line: " + line);
+    log("Column: " + column);
 
     if (error) {
-
-        log(error.stack || error.toString());
-
+        log("Error: " + (error.stack || error.toString()));
     }
 };
 
 window.onunhandledrejection = function(event) {
 
-    log("PROMISE REJECTION");
-    log(String(event.reason));
+    log("===== UNHANDLED PROMISE REJECTION =====");
+
+    if (event && event.reason) {
+        log(event.reason.stack || String(event.reason));
+    } else {
+        log("Unknown rejection");
+    }
 };
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -49,28 +70,43 @@ function showToast(message, type = "success") {
 
     const toast = document.getElementById("toast");
 
+    if (!toast) {
+
+        log("Toast element not found");
+        return;
+    }
+
     toast.className = "toast " + type;
 
     toast.innerHTML = message.replace(/\n/g, "<br>");
 
-    requestAnimationFrame(() => {
+    requestAnimationFrame(function() {
+
         toast.classList.add("show");
+
     });
 
     clearTimeout(window.toastTimer);
 
-    window.toastTimer = setTimeout(() => {
+    window.toastTimer = setTimeout(function() {
+
         toast.classList.remove("show");
+
     }, 3500);
 }
 
 window.initializePayment = function(session) {
 
+    log("================================");
     log("initializePayment called");
+    log("Order ID: " + session.orderId);
+    log("================================");
 
     window.paymentSession = session;
 
     try {
+
+        log("CSIPayJS typeof = " + typeof CSIPayJS);
 
         log("Creating CSIPay");
 
@@ -78,10 +114,10 @@ window.initializePayment = function(session) {
 
         log("CSIPay created");
 
+        log("Creating components for order: " + session.orderId);
+
         const components = csipay.components({
-
             orderId: session.orderId
-
         });
 
         log("Components created");
@@ -93,76 +129,165 @@ window.initializePayment = function(session) {
 
         log("Card component added");
 
-        const form = document.getElementById("paymentForm");
+        /*
+         * Register payment events ONCE.
+         */
 
-        log("Form = " + (form !== null));
+        log("Registering payment-success listener");
+
+        csipay.on("payment-success", function(data) {
+
+            log("================================");
+            log("EVENT: payment-success");
+            log("Payload: " + safeStringify(data));
+            log("================================");
+
+            showToast(
+                "✅ Payment Successful!",
+                "success"
+            );
+
+        });
+
+        log("Registering payment-failed listener");
+
+        csipay.on("payment-failed", function(data) {
+
+            log("================================");
+            log("EVENT: payment-failed");
+            log("Payload: " + safeStringify(data));
+            log("================================");
+
+            let message = "Payment Failed";
+
+            if (
+                data &&
+                data.messages &&
+                data.messages.length > 0
+            ) {
+
+                message += "\n\n" + data.messages.join("\n");
+
+            }
+
+            showToast(
+                "❌ " + message,
+                "error"
+            );
+
+        });
+
+        /*
+         * Additional diagnostic events.
+         *
+         * These are only diagnostic. If the SDK does not emit them,
+         * nothing happens.
+         */
+
+        const diagnosticEvents = [
+            "payment-error",
+            "processing",
+            "complete",
+            "completed",
+            "error"
+        ];
+
+        diagnosticEvents.forEach(function(eventName) {
+
+            try {
+
+                csipay.on(eventName, function(data) {
+
+                    log(
+                        "DIAGNOSTIC EVENT [" +
+                        eventName +
+                        "]: " +
+                        safeStringify(data)
+                    );
+
+                });
+
+            } catch (e) {
+
+                log(
+                    "Could not register diagnostic event [" +
+                    eventName +
+                    "]: " +
+                    e.message
+                );
+
+            }
+
+        });
+
+        const form = document.getElementById("paymentForm");
+        const payButton = document.getElementById("payButton");
+
+        log("Form found = " + (form !== null));
+        log("Pay button found = " + (payButton !== null));
+
+        if (!form) {
+
+            log("ERROR: paymentForm not found");
+            return;
+        }
 
         form.addEventListener("submit", function(event) {
 
             event.preventDefault();
 
-            log("Submitting payment...");
+            log("================================");
+            log("PAY NOW CLICKED");
+            log("Order ID: " + session.orderId);
+            log("Calling processOrder()");
+            log("================================");
 
-            const events = [
-                "payment-success",
-                "payment-failed",
-                "payment-error",
-                "success",
-                "error",
-                "complete",
-                "completed",
-                "processing",
-                "attempt-payment"
-            ];
+            /*
+             * Prevent accidental double submission while we're testing.
+             */
 
-            csipay.on("payment-success", function(data) {
+            if (payButton) {
+                payButton.disabled = true;
+                payButton.textContent = "Processing...";
+            }
 
-                log("EVENT: payment-success");
-                log(JSON.stringify(data));
+            try {
 
-                showToast(
-                    "✅ Payment Successful!",
-                    "success"
-                );
+                const result = csipay.processOrder();
 
-            });
+                log("processOrder() invoked successfully");
+                log("processOrder return type = " + typeof result);
+                log("processOrder return value = " + safeStringify(result));
 
-            csipay.on("payment-failed", function(data) {
+            } catch (e) {
 
-                log("EVENT: payment-failed");
-                log(JSON.stringify(data));
+                log("===== processOrder EXCEPTION =====");
+                log("Name: " + e.name);
+                log("Message: " + e.message);
 
-                let message = "Payment Failed";
-
-                if (data && data.messages && data.messages.length > 0) {
-                    message += "\n\n" + data.messages.join("\n");
+                if (e.stack) {
+                    log(e.stack);
                 }
 
-                showToast(
-                    "❌ " + message,
-                    "error"
-                );
-
-            });
-
-            csipay.processOrder();
+                if (payButton) {
+                    payButton.disabled = false;
+                    payButton.textContent = "Pay Now";
+                }
+            }
 
         });
 
         log("Submit listener attached");
+        log("Payment page initialization COMPLETE");
 
     } catch (e) {
 
-        log("EXCEPTION");
-
-        log(e.name);
-
-        log(e.message);
+        log("===== INITIALIZATION EXCEPTION =====");
+        log("Name: " + e.name);
+        log("Message: " + e.message);
 
         if (e.stack) {
-
             log(e.stack);
-
         }
 
     }
