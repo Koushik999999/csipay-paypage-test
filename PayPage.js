@@ -133,7 +133,7 @@ window.initializePayment = function(session) {
          * Register payment events ONCE.
          */
 
-        log("Registering payment-success listener");
+        
 
        log("Registering payment-complete listener");
 
