@@ -149,6 +149,12 @@ csipay.on("payment-complete", function(data) {
         "success"
     );
 
+    send({
+        type: "payment-complete",
+        data: data
+    });
+
+
     const payButton = document.getElementById("payButton");
 
     if (payButton) {
