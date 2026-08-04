@@ -190,6 +190,11 @@ csipay.on("payment-failed", function(data) {
         "error"
     );
 
+    send({
+        type: "payment-failed",
+        data: data
+    });
+
     const payButton = document.getElementById("payButton");
 
     if (payButton) {
