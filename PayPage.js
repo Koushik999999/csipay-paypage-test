@@ -129,6 +129,12 @@ window.initializePayment = function(session) {
 
         log("Card component added");
 
+        components.addComponent(
+            "addressElement",
+            "address"
+        );
+
+        log("Address component added");
         /*
          * Register payment events ONCE.
          */
