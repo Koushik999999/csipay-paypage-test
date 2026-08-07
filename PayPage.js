@@ -53,40 +53,70 @@ function showError(message) {
     errors.classList.remove("hidden");
 }
 function populateCountryState() {
-    const countrySelect =
-        document.getElementById("country");
-    const stateSelect =
-        document.getElementById("state");
+
+    log("populateCountryState()");
+    log("typeof LOCATION_DATA = " + typeof LOCATION_DATA);
+
+    const countrySelect = document.getElementById("country");
+    const stateSelect = document.getElementById("state");
+
+    log("countrySelect = " + (countrySelect != null));
+    log("stateSelect = " + (stateSelect != null));
+
     countrySelect.innerHTML = "";
     stateSelect.innerHTML = "";
-    Object.entries(LOCATION_DATA).forEach(([code, country]) => {
-        const option =
-            document.createElement("option");
+
+    const countries = Object.entries(LOCATION_DATA);
+
+    log("Country count = " + countries.length);
+
+    countries.forEach(([code, country]) => {
+
+        log("Adding country = " + country.name);
+
+        const option = document.createElement("option");
         option.value = code;
         option.textContent = country.name;
+
         countrySelect.appendChild(option);
     });
+
+    log("Country options = " + countrySelect.options.length);
+
     loadStates(countrySelect.value);
+
     countrySelect.addEventListener("change", function () {
         loadStates(this.value);
     });
 }
 function loadStates(countryCode) {
-    const stateSelect =
-        document.getElementById("state");
+
+    log("loadStates(" + countryCode + ")");
+
+    const stateSelect = document.getElementById("state");
+
     stateSelect.innerHTML = "";
-    const country =
-        LOCATION_DATA[countryCode];
+
+    const country = LOCATION_DATA[countryCode];
+
     if (!country) {
+        log("Country not found");
         return;
     }
-    country.states.forEach(function (state) {
-        const option =
-            document.createElement("option");
+
+    log("State count = " + country.states.length);
+
+    country.states.forEach(function(state) {
+
+        const option = document.createElement("option");
+
         option.value = state.code;
         option.textContent = state.name;
+
         stateSelect.appendChild(option);
     });
+
+    log("State options = " + stateSelect.options.length);
 }
 window.initializePayment = function(session) {
     log("================================");
