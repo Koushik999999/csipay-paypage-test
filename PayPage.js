@@ -84,6 +84,20 @@ window.initializePayment = function(session) {
             "addressElement",
             "address"
         );
+        
+        setTimeout(() => {
+            const address = document.getElementById("addressElement");
+            log("ADDRESS HTML:");
+            log(address.innerHTML);
+        }, 3000);
+        
+        setTimeout(() => {
+            const iframes = document.querySelectorAll("iframe");
+            log("IFRAME COUNT = " + iframes.length);
+            iframes.forEach((f, i) => {
+                log("iframe[" + i + "] = " + f.src);
+            });
+        }, 3000);
         log("Card component added");
         /*
          * Register payment events ONCE.
@@ -220,5 +234,6 @@ window.initializePayment = function(session) {
         }
     }
 };
+
 
 
