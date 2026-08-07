@@ -20,8 +20,38 @@
     <div class="container">
         <form id="paymentForm">
             <div id="cardElement"></div>
-            
-            <div id="addressElement"></div>
+            <div class="address-container">
+                <input
+                    id="address1"
+                    type="text"
+                    placeholder="Address Line 1"
+                    autocomplete="address-line1">
+                <input
+                    id="address2"
+                    type="text"
+                    placeholder="Address Line 2"
+                    autocomplete="address-line2">
+                <input
+                    id="city"
+                    type="text"
+                    placeholder="City"
+                    autocomplete="address-level2">
+                <input
+                    id="state"
+                    type="text"
+                    placeholder="State"
+                    autocomplete="address-level1">
+                <input
+                    id="zip"
+                    type="text"
+                    placeholder="ZIP Code"
+                    autocomplete="postal-code">
+                <input
+                    id="country"
+                    type="text"
+                    placeholder="Country"
+                    autocomplete="country-name">
+            </div>
             <div
                 id="errors"
                 class="hidden">
@@ -36,6 +66,5 @@
     </div>
 </body>
 </html>
-
 
 
