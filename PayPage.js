@@ -68,60 +68,23 @@ window.initializePayment = function(session) {
     try {
         log("CSIPayJS typeof = " + typeof CSIPayJS);
         log("Creating CSIPay");
-        const config = session.config || {};
-        const csipay = CSIPayJS(
-            session.accessToken,
-            {
-                billingAddress: config.billingAddress
-            }
-        );
-        
-        
-        log("CSIPay keys:");
-        log(Object.keys(csipay).join(","));
+        const csipay = CSIPayJS(session.accessToken);
         log("CSIPay created");
         log("Creating components for order: " + session.orderId);
-        
-        const componentType = config.component || "full-card";
-        const componentOptions = {};
-        if (config.billingAddress) {
-            componentOptions.billingAddress = config.billingAddress;
-        }
-        log("Creating component");
-        log("Component: " + componentType);
-        log("Options: " + safeStringify(componentOptions));
         const components = csipay.components({
-            orderId: session.orderId,
-            billingAddress: "BLAH_BLAH"
+            orderId: session.orderId
         });
-        
-        const originalAddComponent = components.addComponent;
-        components.addComponent = function () {
-            log("===== addComponent =====");
-            log("arguments.length = " + arguments.length);
-            for (let i = 0; i < arguments.length; i++) {
-                log("arg[" + i + "] = " + safeStringify(arguments[i]));
-            }
-            return originalAddComponent.apply(this, arguments);
-        };
-        
-        log("Components keys:");
-        log(Object.keys(components).join(","));
+        log("Components created");
         components.addComponent(
             "cardElement",
-            componentType,
-            componentOptions
+            "full-card"
         );
-        setTimeout(() => {
-            const iframe = document.querySelector("#cardElement iframe");
-            if (!iframe) {
-                log("No iframe");
-                return;
-            }
-            log("IFRAME SRC:");
-            log(iframe.src);
-        }, 3000);
-        log("Component added");
+        
+        components.addComponent(
+            "addressElement",
+            "address"
+        );
+        log("Card component added");
         /*
          * Register payment events ONCE.
          */
