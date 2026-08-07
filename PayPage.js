@@ -132,6 +132,9 @@ window.initializePayment = function(session) {
         components.addComponent(
             "addressElement",
             "address"
+            {
+                required: true
+            }
         );
 
         log("Address component added");
