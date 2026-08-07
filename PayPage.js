@@ -135,7 +135,7 @@ window.initializePayment = function(session) {
 
     components.addComponent(
         "addressElement",
-        "address1"
+        "address"
     );
 
     log("Address component added");
