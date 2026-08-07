@@ -1,145 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <title>CSIPay Manual Payment</title>
-
-    <link
-        rel="stylesheet"
-        href="PayPage.css">
-
-    <script
-        src="https://staging-pyxisapi.csipay.com/js/v1/csi_pay.js"
-        defer>
-    </script>
-
-    <script
-        src="PayPage.js"
-        defer>
-    </script>
-
-</head>
-
+    <head>
+        <meta charset="UTF-8">
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0">
+        <title>CSIPay Manual Payment</title>
+        <link
+            rel="stylesheet"
+            href="PayPage.css">
+        <script
+            src="https://staging-pyxisapi.csipay.com/js/v1/csi_pay.js"
+            defer>
+        </script>
+        <script
+            src="Location.js"
+            defer>
+        </script>
+        <script
+            src="PayPage.js"
+            defer>
+        </script>
+    </head>
 <body>
-
 <div class="container">
-
     <!-- Amount -->
-
     <div class="amount-card">
-
         <div class="amount-title">
             Amount to pay
         </div>
-
         <div
             id="amountValue"
             class="amount-value">
             $0.00
         </div>
-
     </div>
-
-    <form id="paymentForm">
-
+    <form
+        id="paymentForm"
+        novalidate>
         <div class="payment-card">
-
-            <!-- CSIPay iframe -->
-
+            <!-- CSIPay Hosted Card -->
             <div id="cardElement"></div>
-
             <!-- Billing Address -->
-
             <div class="address-grid">
-
                 <div class="field">
-
                     <label for="street">
                         Street Address
                     </label>
-
                     <input
                         id="street"
                         type="text"
                         placeholder="123 Main Street"
-                        autocomplete="address-line1">
-
+                        autocomplete="address-line1"
+                        required>
                 </div>
-
                 <div class="field">
-
                     <label for="city">
                         City
                     </label>
-
                     <input
                         id="city"
                         type="text"
                         placeholder="City"
-                        autocomplete="address-level2">
-
+                        autocomplete="address-level2"
+                        required>
                 </div>
-
                 <div class="field">
-
+                    <label for="country">
+                        Country
+                    </label>
+                    <select
+                        id="country"
+                        autocomplete="country"
+                        required>
+                        <option value="">
+                            Select Country
+                        </option>
+                    </select>
+                </div>
+                <div class="field">
                     <label for="state">
                         State
                     </label>
-
-                    <input
+                    <select
                         id="state"
-                        type="text"
-                        placeholder="State"
-                        autocomplete="address-level1">
-
+                        autocomplete="address-level1"
+                        required>
+                        <option value="">
+                            Select State
+                        </option>
+                    </select>
                 </div>
-
                 <div class="field">
-
                     <label for="zip">
                         ZIP Code
                     </label>
-
                     <input
                         id="zip"
                         type="text"
                         maxlength="5"
                         inputmode="numeric"
                         placeholder="ZIP Code"
-                        autocomplete="postal-code">
-
+                        autocomplete="postal-code"
+                        required>
                 </div>
-
             </div>
-
             <input
                 type="hidden"
                 id="paymentId">
-
             <div
                 id="errors"
-                class="error-banner hidden">
+                class="error-banner hidden"
+                aria-live="polite">
             </div>
-
             <button
                 id="payButton"
                 type="submit">
-                Pay
+                Pay Now
             </button>
-
         </div>
-
     </form>
-
 </div>
-
 </body>
-
 </html>
+
+
+
