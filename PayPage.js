@@ -270,13 +270,34 @@ window.initializePayment = function(session) {
             }
             try {
                 const billingAddress = {
-                    street: document.getElementById("street").value.trim(),
-                    city: document.getElementById("city").value.trim(),
-                    state: document.getElementById("state").value,
-                    zip: document.getElementById("zip").value.trim(),
-                    
-                    country: document.getElementById("country").value
-                };
+    street: document
+        .getElementById("addressLine1")
+        .value
+        .trim(),
+
+    street2: document
+        .getElementById("addressLine2")
+        .value
+        .trim(),
+
+    city: document
+        .getElementById("city")
+        .value
+        .trim(),
+
+    state: document
+        .getElementById("state")
+        .value,
+
+    zip: document
+        .getElementById("zip")
+        .value
+        .trim(),
+
+    country: document
+        .getElementById("country")
+        .value
+};
                 log("Billing Address:");
                 log(JSON.stringify(billingAddress));
                 
