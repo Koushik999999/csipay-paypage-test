@@ -256,8 +256,7 @@ window.initializePayment = function(session) {
                 payButton.textContent = "Processing...";
             }
             try {
-                log("Billing Address:");
-                log(JSON.stringify(billingAddress));
+                
                             
                 document
                     .getElementById("errors")
@@ -282,6 +281,9 @@ window.initializePayment = function(session) {
                     document.getElementById("zip").value.trim();
                 billingAddress.country =
                     document.getElementById("country").value;
+
+                log("Billing Address:");
+                log(JSON.stringify(billingAddress));
 
                 window.paymentSession.billingAddress = billingAddress;
 
