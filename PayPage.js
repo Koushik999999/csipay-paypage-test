@@ -256,35 +256,9 @@ window.initializePayment = function(session) {
                 payButton.textContent = "Processing...";
             }
             try {
-                const billingAddress = {
-                    street: document
-                        .getElementById("addressLine1")
-                        .value
-                        .trim(),
-                    street2: document
-                        .getElementById("addressLine2")
-                        .value
-                        .trim(),
-                    city: document
-                        .getElementById("city")
-                        .value
-                        .trim(),
-                    state: document
-                        .getElementById("state")
-                        .value,
-                    zip: document
-                        .getElementById("zip")
-                        .value
-                        .trim(),
-                    country: document
-                        .getElementById("country")
-                        .value
-                };
                 log("Billing Address:");
                 log(JSON.stringify(billingAddress));
-                
-                window.paymentSession.billingAddress = billingAddress;
-                
+                            
                 document
                     .getElementById("errors")
                     .classList.add("hidden");
@@ -308,6 +282,9 @@ window.initializePayment = function(session) {
                     document.getElementById("zip").value.trim();
                 billingAddress.country =
                     document.getElementById("country").value;
+
+                window.paymentSession.billingAddress = billingAddress;
+
                 const result = csipay.processOrder();
                 
                 log("processOrder() invoked successfully");
