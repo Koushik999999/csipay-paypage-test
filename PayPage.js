@@ -102,12 +102,26 @@ window.initializePayment = function(session) {
             "cardElement",
             componentType
         );
-        setTimeout(function(){
-            log("================================");
-            log("AFTER COMPONENT");
-            log("================================");
-            log(document.body.innerHTML);
-        },3000);
+        setTimeout(function () {
+
+    log("Calling resizeFrame()");
+
+    try {
+        components.resizeFrame();
+
+        const iframe = document.querySelector("#cardElement iframe");
+
+        if (iframe) {
+            log("iframe src = " + iframe.src);
+    log("iframe height attr = " + iframe.getAttribute("height"));
+    log("iframe clientHeight = " + iframe.clientHeight);
+        }
+
+    } catch (e) {
+        log("resizeFrame failed: " + e);
+    }
+
+}, 1000);
         log("Component added");
         /*
          * Register payment events ONCE.
