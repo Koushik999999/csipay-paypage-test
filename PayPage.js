@@ -93,7 +93,7 @@ window.initializePayment = function(session) {
         log("Options: " + safeStringify(componentOptions));
         const components = csipay.components({
             orderId: session.orderId,
-            billingAddress: "full"
+            billingAddress: "BLAH_BLAH"
         });
         
         log("Components keys:");
@@ -102,26 +102,19 @@ window.initializePayment = function(session) {
             "cardElement",
             componentType
         );
-        setTimeout(function () {
+        setTimeout(() => {
 
-    log("Calling resizeFrame()");
+    const iframe = document.querySelector("#cardElement iframe");
 
-    try {
-        components.resizeFrame();
-
-        const iframe = document.querySelector("#cardElement iframe");
-
-        if (iframe) {
-            log("iframe src = " + iframe.src);
-    log("iframe height attr = " + iframe.getAttribute("height"));
-    log("iframe clientHeight = " + iframe.clientHeight);
-        }
-
-    } catch (e) {
-        log("resizeFrame failed: " + e);
+    if (!iframe) {
+        log("No iframe");
+        return;
     }
 
-}, 1000);
+    log("IFRAME SRC:");
+    log(iframe.src);
+
+}, 3000);
         log("Component added");
         /*
          * Register payment events ONCE.
