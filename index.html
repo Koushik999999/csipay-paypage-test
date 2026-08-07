@@ -1,55 +1,41 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0">
-
     <title>CSIPay Manual Payment</title>
-
     <link
         rel="stylesheet"
         href="PayPage.css">
-
         <script
             src="https://staging-pyxisapi.csipay.com/js/v1/csi_pay.js"
             defer>
         </script>
-
         <script src="PayPage.js" defer></script>
-
-
 </head>
 <div id="toast" class="toast"></div>
 <body>
-
     <div class="container">
-
         <form id="paymentForm">
-
             <div id="cardElement"></div>
+            
+            <div id="addressElement"></div>
             <div
                 id="errors"
                 class="hidden">
             </div>
-
             <input
                 type="hidden"
                 id="paymentId">
-
                 <button id="payButton" type="submit">
                     Pay Now
                 </button>
-
         </form>
-
     </div>
-
 </body>
-
 </html>
+
+
+
