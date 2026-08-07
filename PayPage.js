@@ -68,7 +68,12 @@ window.initializePayment = function(session) {
     try {
         log("CSIPayJS typeof = " + typeof CSIPayJS);
         log("Creating CSIPay");
-        const csipay = CSIPayJS(session.accessToken);
+        const csipay = CSIPayJS(
+            session.accessToken,
+            {
+                billingAddress: config.billingAddress
+            }
+        );
         
         
         log("CSIPay keys:");
@@ -86,7 +91,7 @@ window.initializePayment = function(session) {
         log("Options: " + safeStringify(componentOptions));
         const components = csipay.components({
             orderId: session.orderId,
-            billingAddress: config.billingAddress
+            billingAddress: "full"
         });
         
         log("Components keys:");
@@ -237,3 +242,5 @@ window.initializePayment = function(session) {
         }
     }
 };
+
+
