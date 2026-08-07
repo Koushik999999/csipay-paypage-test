@@ -42,69 +42,78 @@
             <!-- CSIPay Hosted Card -->
             <div id="cardElement"></div>
             <!-- Billing Address -->
-            <div class="address-grid">
-                <div class="field">
-                    <label for="street">
-                        Street Address
-                    </label>
-                    <input
-                        id="street"
-                        type="text"
-                        placeholder="123 Main Street"
-                        autocomplete="address-line1"
-                        required>
-                </div>
-                <div class="field">
-                    <label for="city">
-                        City
-                    </label>
-                    <input
-                        id="city"
-                        type="text"
-                        placeholder="City"
-                        autocomplete="address-level2"
-                        required>
-                </div>
-                <div class="field">
-                    <label for="country">
-                        Country
-                    </label>
-                    <select
-                        id="country"
-                        autocomplete="country"
-                        required>
-                        <option value="">
-                            Select Country
-                        </option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label for="state">
-                        State
-                    </label>
-                    <select
-                        id="state"
-                        autocomplete="address-level1"
-                        required>
-                        <option value="">
-                            Select State
-                        </option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label for="zip">
-                        ZIP Code
-                    </label>
-                    <input
-                        id="zip"
-                        type="text"
-                        maxlength="5"
-                        inputmode="numeric"
-                        placeholder="ZIP Code"
-                        autocomplete="postal-code"
-                        required>
-                </div>
-            </div>
+<div class="address-grid">
+
+    <div class="field full-width">
+        <label for="street">
+            Address Line 1
+        </label>
+        <input
+            id="street"
+            type="text"
+            placeholder="Street address"
+            autocomplete="address-line1"
+            required>
+    </div>
+
+    <div class="field full-width">
+        <label for="street2">
+            Address Line 2
+        </label>
+        <input
+            id="street2"
+            type="text"
+            placeholder="Apartment, suite, unit (optional)"
+            autocomplete="address-line2">
+    </div>
+
+    <div class="field">
+        <label for="city">
+            City
+        </label>
+        <input
+            id="city"
+            type="text"
+            autocomplete="address-level2"
+            required>
+    </div>
+
+    <div class="field">
+        <label for="state">
+            State
+        </label>
+        <select
+            id="state"
+            autocomplete="address-level1"
+            required>
+        </select>
+    </div>
+
+    <div class="field">
+        <label for="zip">
+            ZIP Code
+        </label>
+        <input
+            id="zip"
+            type="text"
+            maxlength="5"
+            inputmode="numeric"
+            autocomplete="postal-code"
+            required>
+    </div>
+
+    <div class="field">
+        <label for="country">
+            Country
+        </label>
+        <select
+            id="country"
+            autocomplete="country"
+            required>
+        </select>
+    </div>
+
+</div>
             <input
                 type="hidden"
                 id="paymentId">
