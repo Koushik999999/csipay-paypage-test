@@ -1,139 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0">
-        <title>CSIPay Manual Payment</title>
-        <link
-            rel="stylesheet"
-            href="PayPage.css">
-        <script
-            src="https://staging-pyxisapi.csipay.com/js/v1/csi_pay.js"
-            defer>
-        </script>
-        <script
-            src="LocationData.js"
-            defer>
-        </script>
-        <script
-            src="PayPage.js"
-            defer>
-        </script>
-    </head>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>CSIPay Manual Payment</title>
+
+    <link
+        rel="stylesheet"
+        href="PayPage.css">
+
+    <script
+        src="https://staging-pyxisapi.csipay.com/js/v1/csi_pay.js"
+        defer>
+    </script>
+
+    <script
+        src="LocationData.js"
+        defer>
+    </script>
+
+    <script
+        src="PayPage.js"
+        defer>
+    </script>
+
+</head>
+
 <body>
+
 <div class="container">
+
     <!-- Amount -->
     <div class="amount-card">
+
         <div class="amount-title">
             Amount to pay
         </div>
+
         <div
             id="amountValue"
             class="amount-value">
             $0.00
         </div>
+
     </div>
+
     <form
         id="paymentForm"
         novalidate>
+
         <div class="payment-card">
-            <!-- CSIPay Hosted Card -->
+
+            <!-- Hosted Card -->
             <div id="cardElement"></div>
+
+            <!-- Address Level -->
             <div class="field full-width">
-    <label for="addressLevel">
-        Address Level
-    </label>
 
-    <select id="addressLevel">
-        <option value="base">Base</option>
-        <option value="partial">Partial</option>
-        <option value="full">Full</option>
-    </select>
-</div>
-            <!-- Billing Address -->
-<div class="address-grid">
+                <label for="addressLevel">
+                    Address Level
+                </label>
 
-    <div class="field full-width">
-    <label for="addressLine1">
-        Address Line 1
-    </label>
-    <input
-        id="addressLine1"
-        type="text"
-        placeholder="Street address"
-        autocomplete="address-line1"
-        required>
-</div>
+                <select id="addressLevel">
+                    <option value="base">Base</option>
+                    <option value="partial">Partial</option>
+                    <option value="full" selected>Full</option>
+                </select>
 
-<div class="field full-width">
-    <label for="addressLine2">
-        Address Line 2
-    </label>
-    <input
-        id="addressLine2"
-        type="text"
-        placeholder="Apartment, Suite, Unit (Optional)"
-        autocomplete="address-line2">
-</div>
+            </div>
 
-    <div class="field small-field">
-    <label for="city">City</label>
-    <input
-        id="city"
-        type="text"
-        autocomplete="address-level2"
-        required>
-</div>
+            <!-- Address -->
+            <div class="address-grid">
 
-<div class="field large-field">
-    <label for="state">State</label>
-    <select
-        id="state"
-        autocomplete="address-level1"
-        required>
-    </select>
-</div>
+                <!-- FULL ADDRESS -->
+                <div id="fullAddressFields" class="contents">
 
-<div class="field small-field">
-    <label for="zip">ZIP Code</label>
-    <input
-        id="zip"
-        type="text"
-        maxlength="5"
-        inputmode="numeric"
-        autocomplete="postal-code"
-        required>
-</div>
+                    <div class="field full-width">
 
-<div class="field large-field">
-    <label for="country">Country</label>
-    <select
-        id="country"
-        autocomplete="country"
-        required>
-    </select>
-</div>
-</div>
+                        <label for="addressLine1">
+                            Address Line 1
+                        </label>
+
+                        <input
+                            id="addressLine1"
+                            type="text"
+                            placeholder="Street address"
+                            autocomplete="address-line1">
+
+                    </div>
+
+                    <div class="field full-width">
+
+                        <label for="addressLine2">
+                            Address Line 2
+                        </label>
+
+                        <input
+                            id="addressLine2"
+                            type="text"
+                            placeholder="Apartment, Suite, Unit (Optional)"
+                            autocomplete="address-line2">
+
+                    </div>
+
+                </div>
+
+                <!-- PARTIAL ADDRESS -->
+                <div id="partialAddressFields" class="contents">
+
+                    <div class="field small-field">
+
+                        <label for="city">
+                            City
+                        </label>
+
+                        <input
+                            id="city"
+                            type="text"
+                            autocomplete="address-level2">
+
+                    </div>
+
+                    <div class="field large-field">
+
+                        <label for="state">
+                            State
+                        </label>
+
+                        <select
+                            id="state"
+                            autocomplete="address-level1">
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- BASE ADDRESS -->
+                <div id="baseAddressFields" class="contents">
+
+                    <div class="field small-field">
+
+                        <label for="zip">
+                            ZIP Code
+                        </label>
+
+                        <input
+                            id="zip"
+                            type="text"
+                            maxlength="5"
+                            inputmode="numeric"
+                            autocomplete="postal-code">
+
+                    </div>
+
+                    <div class="field large-field">
+
+                        <label for="country">
+                            Country
+                        </label>
+
+                        <select
+                            id="country"
+                            autocomplete="country">
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
             <input
                 type="hidden"
                 id="paymentId">
+
             <div
                 id="errors"
                 class="error-banner hidden"
                 aria-live="polite">
             </div>
+
             <button
                 id="payButton"
                 type="submit">
                 Pay Now
             </button>
+
         </div>
+
     </form>
+
 </div>
+
 </body>
+
 </html>
-
-
-
