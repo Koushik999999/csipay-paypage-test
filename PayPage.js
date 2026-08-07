@@ -68,6 +68,8 @@ window.initializePayment = function(session) {
     try {
         log("CSIPayJS typeof = " + typeof CSIPayJS);
         log("Creating CSIPay");
+
+        const config = session.config || {};
         const csipay = CSIPayJS(
             session.accessToken,
             {
@@ -80,7 +82,7 @@ window.initializePayment = function(session) {
         log(Object.keys(csipay).join(","));
         log("CSIPay created");
         log("Creating components for order: " + session.orderId);
-        const config = session.config || {};
+        
         const componentType = config.component || "full-card";
         const componentOptions = {};
         if (config.billingAddress) {
