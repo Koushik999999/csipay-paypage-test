@@ -52,6 +52,42 @@ function showError(message) {
     errors.textContent = message;
     errors.classList.remove("hidden");
 }
+function populateCountryState() {
+    const countrySelect =
+        document.getElementById("country");
+    const stateSelect =
+        document.getElementById("state");
+    countrySelect.innerHTML = "";
+    stateSelect.innerHTML = "";
+    Object.entries(LOCATION_DATA).forEach(([code, country]) => {
+        const option =
+            document.createElement("option");
+        option.value = code;
+        option.textContent = country.name;
+        countrySelect.appendChild(option);
+    });
+    loadStates(countrySelect.value);
+    countrySelect.addEventListener("change", function () {
+        loadStates(this.value);
+    });
+}
+function loadStates(countryCode) {
+    const stateSelect =
+        document.getElementById("state");
+    stateSelect.innerHTML = "";
+    const country =
+        LOCATION_DATA[countryCode];
+    if (!country) {
+        return;
+    }
+    country.states.forEach(function (state) {
+        const option =
+            document.createElement("option");
+        option.value = state.code;
+        option.textContent = state.name;
+        stateSelect.appendChild(option);
+    });
+}
 window.initializePayment = function(session) {
     log("================================");
     log("initializePayment called");
@@ -59,15 +95,22 @@ window.initializePayment = function(session) {
     log("================================");
     window.paymentSession = session;
     
+    populateCountryState();
+    
     const amount = Number(session.amount || 0);
     document.getElementById("amountValue").textContent =
         "$" + amount.toFixed(2);
     const zip = document.getElementById("zip");
-    zip.addEventListener("input", function(){
-        this.value = this.value
-            .replace(/\D/g,"")
-            .slice(0,5);
-    });
+    if (zip) {
+        
+        zip.addEventListener("input", function(){
+            this.value = this.value
+                .replace(/\D/g,"")
+                .slice(0,5);
+        });
+        
+    }
+    
     try {
         log("CSIPayJS typeof = " + typeof CSIPayJS);
         log("Creating CSIPay");
@@ -120,10 +163,7 @@ window.initializePayment = function(session) {
             ) {
                 message += "\n\n" + data.messages.join("\n");
             }
-            showError(
-                "❌ " + message,
-                "error"
-            );
+            showError("❌ " + message);
             
             send({
                 type: "payment-failed",
@@ -192,17 +232,21 @@ window.initializePayment = function(session) {
                 const billingAddress = {
                     street: document.getElementById("street").value.trim(),
                     city: document.getElementById("city").value.trim(),
-                    state: document.getElementById("state").value.trim(),
-                    zip: document.getElementById("zip").value.trim()
+                    state: document.getElementById("state").value,
+                    zip: document.getElementById("zip").value.trim(),
+                    
+                    country: document.getElementById("country").value
                 };
                 log("Billing Address:");
                 log(JSON.stringify(billingAddress));
                 
                 window.paymentSession.billingAddress = billingAddress;
-                const result = csipay.processOrder();
+                
                 document
                     .getElementById("errors")
                     .classList.add("hidden");
+                const result = csipay.processOrder();
+                
                 log("processOrder() invoked successfully");
                 log("processOrder return type = " + typeof result);
                 log("processOrder return value = " + safeStringify(result));
@@ -230,6 +274,5 @@ window.initializePayment = function(session) {
         }
     }
 };
-
 
 
