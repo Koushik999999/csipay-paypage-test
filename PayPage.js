@@ -130,7 +130,15 @@ window.initializePayment = function(session) {
          * Register payment events ONCE.
          */
 
-           populateCountryState();
+            if (typeof LOCATION_DATA !== "undefined") {
+
+        populateCountryState();
+
+    } else {
+
+        log("LOCATION_DATA not loaded.");
+
+    }
         log("Registering payment-success listener");
         csipay.on("payment-complete", function(data) {
             log("================================");
