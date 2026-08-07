@@ -1,59 +1,70 @@
-html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: -apple-system,
-                 BlinkMacSystemFont,
-                 sans-serif;
-    background: #ffffff;
-}
-.container {
-    padding: 20px;
-}
-#cardElement {
-    margin-bottom: 20px;
-}
-#errors {
-    color: red;
-    margin-bottom: 16px;
-}
-.hidden {
-    display: none;
-}
-#payButton {
-    width: 100%;
-    height: 48px;
-}
-.toast {
-    position: fixed;
-    left: 50%;
-    bottom: 30px;
-    transform: translateX(-50%) translateY(100px);
-    min-width: 280px;
-    max-width: 90%;
-    padding: 14px 20px;
-    border-radius: 12px;
-    color: white;
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    opacity: 0;
-    transition: all 0.3s ease;
-    z-index: 99999;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-}
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-.toast.success {
-    background: #28a745;
-}
-.toast.error {
-    background: #dc3545;
-}
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <title>CSIPay Manual Payment</title>
+    <link
+        rel="stylesheet"
+        href="PayPage.css">
+        <script
+            src="https://staging-pyxisapi.csipay.com/js/v1/csi_pay.js"
+            defer>
+        </script>
+        <script src="PayPage.js" defer></script>
+</head>
+<div id="toast" class="toast"></div>
+<body>
+    <div class="container">
+        <form id="paymentForm">
+            <div id="cardElement"></div>
+            <div class="address-container">
+                <input
+                    id="address1"
+                    type="text"
+                    placeholder="Address Line 1"
+                    autocomplete="address-line1">
+                <input
+                    id="address2"
+                    type="text"
+                    placeholder="Address Line 2"
+                    autocomplete="address-line2">
+                <input
+                    id="city"
+                    type="text"
+                    placeholder="City"
+                    autocomplete="address-level2">
+                <input
+                    id="state"
+                    type="text"
+                    placeholder="State"
+                    autocomplete="address-level1">
+                <input
+                    id="zip"
+                    type="text"
+                    placeholder="ZIP Code"
+                    autocomplete="postal-code">
+                <input
+                    id="country"
+                    type="text"
+                    placeholder="Country"
+                    autocomplete="country-name">
+            </div>
+            <div
+                id="errors"
+                class="hidden">
+            </div>
+            <input
+                type="hidden"
+                id="paymentId">
+                <button id="payButton" type="submit">
+                    Pay Now
+                </button>
+        </form>
+    </div>
+</body>
+</html>
 
 
