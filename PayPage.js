@@ -116,47 +116,31 @@ window.initializePayment = function(session) {
 
         log("Creating components for order: " + session.orderId);
 
-        const components = csipay.components({
-            orderId: session.orderId
-        });
+const config = session.config || {};
 
-        log("Components created");
+const componentType = config.component || "full-card";
 
-        components.addComponent(
-            "cardElement",
-            "full-card"
-        );
+const componentOptions = {};
 
-        log("Card component added");
-
-        try {
-
-    log("Adding address component");
-
-    components.addComponent(
-        "addressElement",
-        "address",
-        {}
-    );
-
-    log("Address component added");
-
-} catch (e) {
-
-    log("ADDRESS COMPONENT FAILED");
-
-    log("Type: " + typeof e);
-            log("Value: " + String(e));
-            try {
-                log(JSON.stringify(e));
-            } catch (_) {}
-
-
-    if (e.stack) {
-        log(e.stack);
-    }
-
+if (config.billingAddress) {
+    componentOptions.billingAddress = config.billingAddress;
 }
+
+log("Creating component");
+log("Component: " + componentType);
+log("Options: " + safeStringify(componentOptions));
+
+const components = csipay.components({
+    orderId: session.orderId
+});
+
+components.addComponent(
+    "cardElement",
+    componentType,
+    componentOptions
+);
+
+log("Component added");
 
         /*
          * Register payment events ONCE.
