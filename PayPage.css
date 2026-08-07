@@ -193,6 +193,9 @@ body{
     .address-grid{
         grid-template-columns:1fr;
     }
+    .full-width{
+    grid-column:1 / -1;
+}
     .amount-value{
         font-size:38px;
     }
