@@ -68,8 +68,8 @@ window.initializePayment = function(session) {
     try {
         log("CSIPayJS typeof = " + typeof CSIPayJS);
         log("Creating CSIPay");
-
         const config = session.config || {};
+        
         const csipay = CSIPayJS(
             session.accessToken,
             {
