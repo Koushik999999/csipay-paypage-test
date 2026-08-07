@@ -129,13 +129,30 @@ window.initializePayment = function(session) {
 
         log("Card component added");
 
-        components.addComponent(
-            "addressElement",
-            "address"
-            {
-                required: true
-            }
-        );
+        try {
+
+    log("Adding address component");
+
+    components.addComponent(
+        "addressElement",
+        "address"
+    );
+
+    log("Address component added");
+
+} catch (e) {
+
+    log("ADDRESS COMPONENT FAILED");
+
+    log(e.message);
+
+    if (e.stack) {
+        log(e.stack);
+    }
+
+}
+
+
 
         log("Address component added");
         /*
