@@ -95,7 +95,18 @@ window.initializePayment = function(session) {
             orderId: session.orderId,
             billingAddress: "BLAH_BLAH"
         });
-        
+        const originalAddComponent = components.addComponent;
+
+components.addComponent = function () {
+
+    log("===== addComponent called =====");
+
+    for (let i = 0; i < arguments.length; i++) {
+        log("arg[" + i + "] = " + safeStringify(arguments[i]));
+    }
+
+    return originalAddComponent.apply(this, arguments);
+};
         log("Components keys:");
         log(Object.keys(components).join(","));
         components.addComponent(
