@@ -53,69 +53,53 @@ function showError(message) {
     errors.classList.remove("hidden");
 }
 function populateCountryState() {
-
     log("populateCountryState()");
     log("typeof LOCATION_DATA = " + typeof LOCATION_DATA);
-
     const countrySelect = document.getElementById("country");
     const stateSelect = document.getElementById("state");
-
     log("countrySelect = " + (countrySelect != null));
     log("stateSelect = " + (stateSelect != null));
-
     countrySelect.innerHTML = "";
     stateSelect.innerHTML = "";
-
     const countries = Object.entries(LOCATION_DATA);
-
     log("Country count = " + countries.length);
-
     countries.forEach(([code, country]) => {
-
         log("Adding country = " + country.name);
-
         const option = document.createElement("option");
         option.value = code;
         option.textContent = country.name;
-
         countrySelect.appendChild(option);
     });
-
     log("Country options = " + countrySelect.options.length);
-
     loadStates(countrySelect.value);
-
     countrySelect.addEventListener("change", function () {
         loadStates(this.value);
     });
 }
+function updateAddressFields(level) {
+    document.getElementById("baseAddressFields").style.display =
+        "grid";
+    document.getElementById("partialAddressFields").style.display =
+        level === "base" ? "none" : "grid";
+    document.getElementById("fullAddressFields").style.display =
+        level === "full" ? "grid" : "none";
+}
 function loadStates(countryCode) {
-
     log("loadStates(" + countryCode + ")");
-
     const stateSelect = document.getElementById("state");
-
     stateSelect.innerHTML = "";
-
     const country = LOCATION_DATA[countryCode];
-
     if (!country) {
         log("Country not found");
         return;
     }
-
     log("State count = " + country.states.length);
-
     country.states.forEach(function(state) {
-
         const option = document.createElement("option");
-
         option.value = state.code;
         option.textContent = state.name;
-
         stateSelect.appendChild(option);
     });
-
     log("State options = " + stateSelect.options.length);
 }
 window.initializePayment = function(session) {
@@ -141,6 +125,14 @@ window.initializePayment = function(session) {
         
     }
     
+    const addressLevel = document.getElementById("addressLevel");
+    updateAddressFields(addressLevel.value);
+    addressLevel.addEventListener( "change",
+                                  function () {
+        updateAddressFields(this.value);
+    }
+                                  );
+    
     try {
         log("CSIPayJS typeof = " + typeof CSIPayJS);
         log("Creating CSIPay");
@@ -159,15 +151,10 @@ window.initializePayment = function(session) {
         /*
          * Register payment events ONCE.
          */
-
             if (typeof LOCATION_DATA !== "undefined") {
-
         populateCountryState();
-
     } else {
-
         log("LOCATION_DATA not loaded.");
-
     }
         log("Registering payment-success listener");
         csipay.on("payment-complete", function(data) {
@@ -270,34 +257,29 @@ window.initializePayment = function(session) {
             }
             try {
                 const billingAddress = {
-    street: document
-        .getElementById("addressLine1")
-        .value
-        .trim(),
-
-    street2: document
-        .getElementById("addressLine2")
-        .value
-        .trim(),
-
-    city: document
-        .getElementById("city")
-        .value
-        .trim(),
-
-    state: document
-        .getElementById("state")
-        .value,
-
-    zip: document
-        .getElementById("zip")
-        .value
-        .trim(),
-
-    country: document
-        .getElementById("country")
-        .value
-};
+                    street: document
+                        .getElementById("addressLine1")
+                        .value
+                        .trim(),
+                    street2: document
+                        .getElementById("addressLine2")
+                        .value
+                        .trim(),
+                    city: document
+                        .getElementById("city")
+                        .value
+                        .trim(),
+                    state: document
+                        .getElementById("state")
+                        .value,
+                    zip: document
+                        .getElementById("zip")
+                        .value
+                        .trim(),
+                    country: document
+                        .getElementById("country")
+                        .value
+                };
                 log("Billing Address:");
                 log(JSON.stringify(billingAddress));
                 
@@ -306,6 +288,26 @@ window.initializePayment = function(session) {
                 document
                     .getElementById("errors")
                     .classList.add("hidden");
+                
+                const level =
+                    document.getElementById("addressLevel").value;
+                const billingAddress = {};
+                if (level === "full") {
+                    billingAddress.street =
+                        document.getElementById("addressLine1").value.trim();
+                    billingAddress.street2 =
+                        document.getElementById("addressLine2").value.trim();
+                }
+                if (level === "full" || level === "partial") {
+                    billingAddress.city =
+                        document.getElementById("city").value.trim();
+                    billingAddress.state =
+                        document.getElementById("state").value;
+                }
+                billingAddress.zip =
+                    document.getElementById("zip").value.trim();
+                billingAddress.country =
+                    document.getElementById("country").value;
                 const result = csipay.processOrder();
                 
                 log("processOrder() invoked successfully");
@@ -335,5 +337,6 @@ window.initializePayment = function(session) {
         }
     }
 };
+
 
 
