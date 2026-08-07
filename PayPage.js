@@ -43,21 +43,14 @@ window.onunhandledrejection = function(event) {
 document.addEventListener("DOMContentLoaded", function() {
     log("DOM LOADED");
 });
-function showToast(message, type = "success") {
-    const toast = document.getElementById("toast");
-    if (!toast) {
-        log("Toast element not found");
+function showError(message) {
+    const errors =
+        document.getElementById("errors");
+    if (!errors) {
         return;
     }
-    toast.className = "toast " + type;
-    toast.innerHTML = message.replace(/\n/g, "<br>");
-    requestAnimationFrame(function() {
-        toast.classList.add("show");
-    });
-    clearTimeout(window.toastTimer);
-    window.toastTimer = setTimeout(function() {
-        toast.classList.remove("show");
-    }, 3500);
+    errors.textContent = message;
+    errors.classList.remove("hidden");
 }
 window.initializePayment = function(session) {
     log("================================");
@@ -65,6 +58,16 @@ window.initializePayment = function(session) {
     log("Order ID: " + session.orderId);
     log("================================");
     window.paymentSession = session;
+    
+    const amount = Number(session.amount || 0);
+    document.getElementById("amountValue").textContent =
+        "$" + amount.toFixed(2);
+    const zip = document.getElementById("zip");
+    zip.addEventListener("input", function(){
+        this.value = this.value
+            .replace(/\D/g,"")
+            .slice(0,5);
+    });
     try {
         log("CSIPayJS typeof = " + typeof CSIPayJS);
         log("Creating CSIPay");
@@ -79,25 +82,6 @@ window.initializePayment = function(session) {
             "cardElement",
             "full-card"
         );
-        
-        components.addComponent(
-            "addressElement",
-            "address"
-        );
-        
-        setTimeout(() => {
-            const address = document.getElementById("addressElement");
-            log("ADDRESS HTML:");
-            log(address.innerHTML);
-        }, 3000);
-        
-        setTimeout(() => {
-            const iframes = document.querySelectorAll("iframe");
-            log("IFRAME COUNT = " + iframes.length);
-            iframes.forEach((f, i) => {
-                log("iframe[" + i + "] = " + f.src);
-            });
-        }, 3000);
         log("Card component added");
         /*
          * Register payment events ONCE.
@@ -108,10 +92,9 @@ window.initializePayment = function(session) {
             log("EVENT: payment-complete");
             log("Payload: " + safeStringify(data));
             log("================================");
-            showToast(
-                "✅ Payment Successful!",
-                "success"
-            );
+            document
+                .getElementById("errors")
+                .classList.add("hidden");
             
             send({
                 type: "payment-complete",
@@ -137,7 +120,7 @@ window.initializePayment = function(session) {
             ) {
                 message += "\n\n" + data.messages.join("\n");
             }
-            showToast(
+            showError(
                 "❌ " + message,
                 "error"
             );
@@ -207,18 +190,19 @@ window.initializePayment = function(session) {
             }
             try {
                 const billingAddress = {
-                    address1: document.getElementById("address1").value,
-                    address2: document.getElementById("address2").value,
-                    city: document.getElementById("city").value,
-                    state: document.getElementById("state").value,
-                    zip: document.getElementById("zip").value,
-                    country: document.getElementById("country").value
+                    street: document.getElementById("street").value.trim(),
+                    city: document.getElementById("city").value.trim(),
+                    state: document.getElementById("state").value.trim(),
+                    zip: document.getElementById("zip").value.trim()
                 };
                 log("Billing Address:");
                 log(JSON.stringify(billingAddress));
                 
                 window.paymentSession.billingAddress = billingAddress;
                 const result = csipay.processOrder();
+                document
+                    .getElementById("errors")
+                    .classList.add("hidden");
                 log("processOrder() invoked successfully");
                 log("processOrder return type = " + typeof result);
                 log("processOrder return value = " + safeStringify(result));
@@ -246,5 +230,6 @@ window.initializePayment = function(session) {
         }
     }
 };
+
 
 
