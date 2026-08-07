@@ -206,6 +206,18 @@ window.initializePayment = function(session) {
                 payButton.textContent = "Processing...";
             }
             try {
+                const billingAddress = {
+                    address1: document.getElementById("address1").value,
+                    address2: document.getElementById("address2").value,
+                    city: document.getElementById("city").value,
+                    state: document.getElementById("state").value,
+                    zip: document.getElementById("zip").value,
+                    country: document.getElementById("country").value
+                };
+                log("Billing Address:");
+                log(JSON.stringify(billingAddress));
+                
+                window.paymentSession.billingAddress = billingAddress;
                 const result = csipay.processOrder();
                 log("processOrder() invoked successfully");
                 log("processOrder return type = " + typeof result);
@@ -234,6 +246,5 @@ window.initializePayment = function(session) {
         }
     }
 };
-
 
 
