@@ -135,7 +135,8 @@ window.initializePayment = function(session) {
 
     components.addComponent(
         "addressElement",
-        "address"
+        "address",
+        {}
     );
 
     log("Address component added");
@@ -144,7 +145,12 @@ window.initializePayment = function(session) {
 
     log("ADDRESS COMPONENT FAILED");
 
-    log(e.message);
+    log("Type: " + typeof e);
+            log("Value: " + String(e));
+            try {
+                log(JSON.stringify(e));
+            } catch (_) {}
+
 
     if (e.stack) {
         log(e.stack);
@@ -152,9 +158,6 @@ window.initializePayment = function(session) {
 
 }
 
-
-
-        log("Address component added");
         /*
          * Register payment events ONCE.
          */
