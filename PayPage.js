@@ -95,7 +95,7 @@ window.initializePayment = function(session) {
     log("================================");
     window.paymentSession = session;
     
-    populateCountryState();
+ 
     
     const amount = Number(session.amount || 0);
     document.getElementById("amountValue").textContent =
@@ -129,6 +129,8 @@ window.initializePayment = function(session) {
         /*
          * Register payment events ONCE.
          */
+
+           populateCountryState();
         log("Registering payment-success listener");
         csipay.on("payment-complete", function(data) {
             log("================================");
