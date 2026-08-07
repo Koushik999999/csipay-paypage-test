@@ -64,21 +64,29 @@ body{
     border-radius:12px;
     display:block;
 }
-
 /*=========================
   Address
 ==========================*/
 
 .address-grid{
     display:grid;
-    grid-template-columns:repeat(2, minmax(0,1fr));
-    column-gap:14px;
+    grid-template-columns:38% 58%;
+    column-gap:4%;
     row-gap:18px;
     margin-top:12px;
+    align-items:end;
 }
 
 .full-width{
     grid-column:1 / -1;
+}
+
+.small-field{
+    min-width:0;
+}
+
+.large-field{
+    min-width:0;
 }
 
 .field{
@@ -97,12 +105,11 @@ body{
 .field input,
 .field select{
     width:100%;
-    min-width:0;
     height:52px;
     border:1px solid #d6d6d6;
     border-radius:10px;
     padding:0 12px;
-    font-size:16px;
+    font-size:15px;
     font-family:inherit;
     background:white;
     box-sizing:border-box;
@@ -118,12 +125,16 @@ body{
     -webkit-appearance:none;
     cursor:pointer;
 
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='2' fill='none'/%3E%3C/svg%3E");
     background-repeat:no-repeat;
-    background-position:right 12px center;
+    background-position:right 10px center;
     background-size:12px;
 
-    padding-right:34px;
+    padding-right:32px;
 }
 
 .field input:focus,
@@ -131,6 +142,7 @@ body{
     outline:none;
     border-color:#1976D2;
 }
+
 /*=========================
   Error
 ==========================*/
@@ -198,6 +210,7 @@ body{
 /*=========================
   Mobile
 ==========================*/
+
 @media (max-width:600px){
 
     .container{
@@ -214,20 +227,27 @@ body{
     }
 
     .address-grid{
-        column-gap:10px;
+        grid-template-columns:36% 60%;
+        column-gap:4%;
         row-gap:16px;
+    }
+
+    .field label{
+        font-size:14px;
     }
 
     .field input,
     .field select{
-        font-size:15px;
-        padding:0 10px;
+        height:48px;
+        font-size:14px;
+        padding-left:10px;
+        padding-right:10px;
     }
 
     .field select{
         padding-right:28px;
+        background-position:right 8px center;
     }
 }
-
 
 
