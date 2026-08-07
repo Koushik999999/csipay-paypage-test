@@ -69,7 +69,6 @@ window.initializePayment = function(session) {
         log("CSIPayJS typeof = " + typeof CSIPayJS);
         log("Creating CSIPay");
         const config = session.config || {};
-        
         const csipay = CSIPayJS(
             session.accessToken,
             {
@@ -95,37 +94,33 @@ window.initializePayment = function(session) {
             orderId: session.orderId,
             billingAddress: "BLAH_BLAH"
         });
+        
         const originalAddComponent = components.addComponent;
-
-components.addComponent = function () {
-
-    log("===== addComponent called =====");
-
-    for (let i = 0; i < arguments.length; i++) {
-        log("arg[" + i + "] = " + safeStringify(arguments[i]));
-    }
-
-    return originalAddComponent.apply(this, arguments);
-};
+        components.addComponent = function () {
+            log("===== addComponent =====");
+            log("arguments.length = " + arguments.length);
+            for (let i = 0; i < arguments.length; i++) {
+                log("arg[" + i + "] = " + safeStringify(arguments[i]));
+            }
+            return originalAddComponent.apply(this, arguments);
+        };
+        
         log("Components keys:");
         log(Object.keys(components).join(","));
         components.addComponent(
             "cardElement",
-            componentType
+            componentType,
+            componentOptions
         );
         setTimeout(() => {
-
-    const iframe = document.querySelector("#cardElement iframe");
-
-    if (!iframe) {
-        log("No iframe");
-        return;
-    }
-
-    log("IFRAME SRC:");
-    log(iframe.src);
-
-}, 3000);
+            const iframe = document.querySelector("#cardElement iframe");
+            if (!iframe) {
+                log("No iframe");
+                return;
+            }
+            log("IFRAME SRC:");
+            log(iframe.src);
+        }, 3000);
         log("Component added");
         /*
          * Register payment events ONCE.
